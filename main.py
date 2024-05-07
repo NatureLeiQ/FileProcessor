@@ -6,8 +6,8 @@ from FileTraverse.TraverseStrategies.strategies.suffix_traverse_strategy import 
 from FileTraverse.TraverseStrategies.traverse_strategy_action_model_enum import TraverseStrategyActionModelEnum
 
 if __name__ == '__main__':
-    root_directory = r"H:\NATURETOOLSHOP\nature-tool-shop\cloud\auth"  # 根目录
-    generate_path = r"H:\PythonProjects\ExtractChineseFromJavaProject\test"  # 生成的目录
+    root_directory = r"your\file\path"  # 根目录
+    generate_path = r"file\generation\path"  # 生成的目录
     strategies = list()
     strategies.append(SuffixTraverseStrategy(".properties"))
     strategies.append(DirNameStrategy("i18n"))
