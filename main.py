@@ -1,8 +1,8 @@
 from Dispatcher.dispatcher import Dispatcher
-from FileProcessors.generators.one_to_one_text_generator import OneToOneTextGenerator
-from FileProcessors.generators.all_to_one_excel_generator import AllToOneExcelGenerator
-from FileTraverse.TraverseStrategies.strategies.dir_name_strategy import DirNameStrategy
-from FileTraverse.TraverseStrategies.strategies.suffix_traverse_strategy import SuffixTraverseStrategy
+from FileProcessors.Generators.one_to_one_text_generator import OneToOneTextGenerator
+from FileProcessors.Generators.all_to_one_excel_generator import AllToOneExcelGenerator
+from FileTraverse.TraverseStrategies.Strategies.dir_name_strategy import DirNameStrategy
+from FileTraverse.TraverseStrategies.Strategies.suffix_traverse_strategy import SuffixTraverseStrategy
 from FileTraverse.TraverseStrategies.traverse_strategy_action_model_enum import TraverseStrategyActionModelEnum
 
 if __name__ == '__main__':

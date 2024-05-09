@@ -63,7 +63,7 @@ class Dispatcher:
         :return:
         """
         config_result_processors = list()
-        file_processors = load_modules_from_folder("FileProcessors/processors")
+        file_processors = load_modules_from_folder("FileProcessors/Processors")
         specify_processor = False
         if self.specify_processors is not None:
             specify_processor = True
