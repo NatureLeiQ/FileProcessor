@@ -4,6 +4,9 @@ from FileTraverse.TraverseStrategies.abstract_traverse_strategy import AbstractT
 
 
 class DirNameStrategy(AbstractTraverserStrategy):
+    """
+    文件夹名称策略
+    """
     def __init__(self, dir_names, include=True):
         self.dir_names = dir_names
         self.include = include  # include=True表示只检查这个包下面的，include=False表示排除这个包下面的
@@ -35,8 +38,4 @@ class DirNameStrategy(AbstractTraverserStrategy):
         return dir_name in split_path
 
 
-if __name__ == '__main__':
-    out_file_path = r"H:\NATURETOOLSHOP\nature-tool-shop\cloud\framework\src\main\java\com\nature\framework\enums\BeanUtilsCopyModeEnums.java"
-    dirs = ["enums", "enum"]
-    strategy = DirNameStrategy("enums", True)
-    print(strategy.can_traverse(out_file_path))
+
