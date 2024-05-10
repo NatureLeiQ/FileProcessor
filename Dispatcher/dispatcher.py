@@ -1,11 +1,6 @@
-import os.path
-
-from Expections.generator_name_not_exist_exception import GeneratorNameNotExistException
-from Expections.generators_not_config_exception import GeneratorsNotConfigException
 from FileProcessors.processor_composite import ProcessorComposite
 from FileTraverse.TraverseStrategies.traverse_strategy_manager import TraverseStrategyManager
 from FileTraverse.file_traverse import FileTraverse
-from Utils.import_utils import load_modules_from_folder
 
 
 class Dispatcher:
@@ -20,20 +15,12 @@ class Dispatcher:
         :param specify_processors: 指定的文件处理器，不指定会遍历所有可执行的处理器。后期可重构，加入处理器的执行策略。类似遍历策略一样
         """
         self.root_path = root_path
-        self.generate_path = generate_path
         self.strategies = strategies
         self.strategies_action_model_enum = strategies_action_model_enum
         self.exclude_strategies = exclude_strategies
-        self.specify_processors = specify_processors
-        self.generators = generators
         self.file_traverse = self._config_file_traverse()
-        self.processor_composite = self._config_processor_composite()
+        self.processor_composite = ProcessorComposite(specify_processors, generators, generate_path)
         self.traverse_paths = None
-        self._init_check()
-
-    def _init_check(self):
-        if len(self.generators) <= 0:
-            raise GeneratorsNotConfigException("未配置文件生成器")
 
     def run(self):
         self.file_traverse.traverse()
@@ -52,38 +39,3 @@ class Dispatcher:
         :return:
         """
         return TraverseStrategyManager(self.strategies, self.strategies_action_model_enum, self.exclude_strategies)
-
-    def _config_processor_composite(self):
-        processors = self._config_file_processors()
-        return ProcessorComposite(processors)
-
-    def _config_file_processors(self):
-        """
-        配置文件处理器
-        :return:
-        """
-        config_result_processors = list()
-        file_processors = load_modules_from_folder("FileProcessors/Processors")
-        specify_processor = False
-        if self.specify_processors is not None:
-            specify_processor = True
-        for processor in file_processors:
-            processor_name = processor.get_name()
-            if processor_name is None:
-                continue
-            if specify_processor:
-                if processor_name in self.specify_processors:
-                    config_result_processors.append(processor)
-            else:
-                config_result_processors.append(processor)
-        for processor in config_result_processors:
-            for generator in self.generators:
-                if generator.get_name() is None:
-                    raise GeneratorNameNotExistException("当前生成器的名称未配置" + str(generator))
-                generate_path_with_name = os.path.join(self.generate_path, generator.get_name())
-                if not os.path.exists(generate_path_with_name):
-                    os.makedirs(generate_path_with_name)
-                generator.set_generate_path(generate_path_with_name)
-            processor.set_generator(self.generators)
-
-        return config_result_processors

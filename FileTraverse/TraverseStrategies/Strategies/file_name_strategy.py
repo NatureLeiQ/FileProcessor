@@ -7,7 +7,7 @@ class FileNameStrategy(AbstractTraverserStrategy):
     """
 
     def __init__(self, name):
-        pass
+        super().__init__()
 
     def can_traverse(self, file_path):
         pass

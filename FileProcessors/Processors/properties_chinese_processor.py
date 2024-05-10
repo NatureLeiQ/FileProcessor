@@ -34,7 +34,7 @@ class PropertiesChineseProcessor(AbstractFileProcessor):
         for generator in self.generators:
             generator.post_process()
 
-    def process_internal(self, file_path):
+    def process(self, file_path):
         file_chinese_list = list()
         with open(file_path, "r", encoding="utf-8") as f:
             row_num = 0

@@ -8,6 +8,7 @@ class DirNameStrategy(AbstractTraverserStrategy):
     文件夹名称策略
     """
     def __init__(self, dir_names, include=True):
+        super().__init__()
         self.dir_names = dir_names
         self.include = include  # include=True表示只检查这个包下面的，include=False表示排除这个包下面的
 

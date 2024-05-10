@@ -11,7 +11,8 @@ class TraverseStrategyManager:
         :param strategies_action_model_enum 策略生效模式，例如：全部满足、满足其中一个、某一个必须满足某几个
         :param exclude_strategies 排除的策略，用于[SATISFACTION_AND_EXCLUDE]这种情况，相当于被排除部分的策略
         """
-        self.strategies = strategies
+        self.strategies = self._ordered_strategies(strategies)
+
         self.strategies_action_model_enum = strategies_action_model_enum
         self.exclude_strategies = exclude_strategies
         self.file_path = None
@@ -103,5 +104,11 @@ class TraverseStrategyManager:
 
     def _at_last_one_satisfaction_and_exclude_at_last_one_strategy(self):
         return self._satisfaction_at_last_one_strategy() and self._exclude_at_last_one_strategy()
+
+    @staticmethod
+    def _ordered_strategies(strategies):
+        # 根据order大小降序，order越大，排序越前。默认order为1000
+        return sorted(strategies, key=lambda strategy: strategy.order)
+
 
 

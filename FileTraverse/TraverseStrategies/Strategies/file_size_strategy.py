@@ -18,6 +18,7 @@ class FileSizeStrategy(AbstractTraverserStrategy):
 
     #
     def __init__(self, size, unit, *x):
+        super().__init__()
         if len(x) > 1:
             raise ParameterNumException("参数数量过多，只能接收一个参数")
         if size is None:

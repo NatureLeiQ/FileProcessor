@@ -28,7 +28,7 @@ class ExtractChineseInJavaProcessor(AbstractFileProcessor):
     def support_process(self, file_path):
         return file_path.endswith('.java')
 
-    def process_internal(self, file_path):
+    def process(self, file_path):
         java_package = None
         file_chinese_list = list()
         with open(file_path, "r", encoding="utf-8") as f:

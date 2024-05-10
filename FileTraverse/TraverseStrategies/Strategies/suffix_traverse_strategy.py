@@ -8,6 +8,7 @@ class SuffixTraverseStrategy(AbstractTraverserStrategy):
         """
         后缀匹配.suffix可传入单个字符串或者一个字符串列表。
         """
+        super().__init__()
         self.suffix = suffix
 
     def can_traverse(self, file_path):

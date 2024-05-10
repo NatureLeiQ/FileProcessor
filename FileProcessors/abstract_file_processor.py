@@ -16,12 +16,8 @@ class AbstractFileProcessor:
     def support_generate(self, path):
         pass
 
-    def process(self, file_path):
-        self.process_internal(file_path)
-        self.post_process()
-
     @abstractmethod
-    def process_internal(self, file_path):
+    def process(self, file_path):
         pass
 
     @abstractmethod
