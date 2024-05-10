@@ -6,10 +6,10 @@ from Utils.import_utils import load_modules_from_folder
 
 class ScannerComposite(AbstractFileScanner):
 
-    def __init__(self, match_text, accurate):
+    def __init__(self, match_text, fuzzy_match):
         super().__init__()
         self.match_text = match_text
-        self.accurate = accurate
+        self.fuzzy_match = fuzzy_match
         self.scanners = self._config_scanners()
 
     def _config_scanners(self):
@@ -18,13 +18,12 @@ class ScannerComposite(AbstractFileScanner):
             raise ScannersNotConfigException("未找到可用的扫描器")
         for scanner in scanners:
             scanner.set_match_text(self.match_text)
-            scanner.set_accurate(self.accurate)
+            scanner.set_fuzzy_match(self.fuzzy_match)
         return scanners
 
     def scan(self, file_info):
         for scanner in self.scanners:
             if scanner.support_scan(file_info):
-                scanner.set_content()
                 return scanner.scan(file_info)
 
     def support_scan(self, file_info):

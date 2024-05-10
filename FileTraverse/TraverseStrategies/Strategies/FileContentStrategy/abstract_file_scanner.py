@@ -4,13 +4,13 @@ from abc import abstractmethod
 class AbstractFileScanner:
     def __init__(self):
         self.match_text = None
-        self.accurate = True
+        self.fuzzy_match = True
 
     def set_match_text(self, match_text):
         self.match_text = match_text
 
-    def set_accurate(self, accurate):
-        self.accurate = accurate
+    def set_fuzzy_match(self, fuzzy_match):
+        self.fuzzy_match = fuzzy_match
 
     @abstractmethod
     def scan(self, file_path):

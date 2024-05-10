@@ -15,8 +15,8 @@ class TextScanner(AbstractFileScanner):
             raise ParameterNotMatchException("未指定扫描文本")
         try:
             file_path = file_info.get("file_path")
-            with open(file_path, "r", encoding=file_path.get("char_set")) as file:
-                if self.accurate:
+            with open(file_path, "r", encoding=file_info.get("char_set")) as file:
+                if not self.fuzzy_match:
                     content = file.read()
                     if self.match_text in content:
                         return True
@@ -24,10 +24,9 @@ class TextScanner(AbstractFileScanner):
                         return False
                 else:
                     for line in file:
-                        if fuzz.ratio(line.strip(), self.match_text) > 90:
+                        if fuzz.partial_ratio(line.strip("\n"), self.match_text) >= 80:
                             return True
-                        else:
-                            return False
+                    return False
         except PermissionError:
             print("检查文件权限，当前文件已跳过")
             return False
