@@ -13,8 +13,8 @@ class TextScanner(AbstractFileScanner):
     def scan(self, file_info):
         if self.match_text is None:
             raise ParameterNotMatchException("未指定扫描文本")
+        file_path = file_info.get("file_path")
         try:
-            file_path = file_info.get("file_path")
             with open(file_path, "r", encoding=file_info.get("char_set")) as file:
                 if not self.fuzzy_match:
                     content = file.read()
@@ -31,7 +31,7 @@ class TextScanner(AbstractFileScanner):
             print("检查文件权限，当前文件已跳过")
             return False
         except UnicodeError:
-            print("文件编码格式不支持")
+            print(f"文件编码格式不支持,文件{file_path}")
             return False
         except IOError:
             print("IOError")

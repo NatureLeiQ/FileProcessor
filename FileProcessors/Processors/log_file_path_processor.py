@@ -1,6 +1,3 @@
-import os
-
-from FileProcessors.Generators.all_to_one_excel_generator import AllToOneExcelGenerator
 from FileProcessors.abstract_file_processor import AbstractFileProcessor
 
 
@@ -20,7 +17,7 @@ class LogFilePathProcessor(AbstractFileProcessor):
 
     def process(self, file_path):
         for generator in self.generators:
-            generator.generate(file_path, file_path)
+            generator.generate(file_path, None)
 
     def post_process(self):
         for generator in self.generators:

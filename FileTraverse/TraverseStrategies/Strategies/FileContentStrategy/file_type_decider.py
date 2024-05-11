@@ -39,8 +39,9 @@ class FileTypeDecider:
             file_type_dict["mime_type_enum"] = FileMimeTypeEnums.text
             file_type_dict["char_set"] = charset
             return file_type_dict
-
-        return FileMimeTypeEnums.unknown
+        file_type_dict["mime_type_enum"] = FileMimeTypeEnums.unknown
+        file_type_dict["char_set"] = None
+        return file_type_dict
 
     @staticmethod
     def _detect_encoding(file_path):

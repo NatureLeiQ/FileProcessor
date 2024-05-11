@@ -37,14 +37,14 @@ class AllToOneExcelGenerator(AbstractFileGenerator):
         wb.save(save_path)
 
     def generate(self, file_name, content):
-        if isinstance(file_name, str):
-            temp_file_name = file_name
-            file_name = list()
-            file_name.append(temp_file_name)
-        if isinstance(content, str):
-            content = [content]
-        self.all_contents.append(file_name)
-        self.all_contents.append(content)
+        if file_name is not None:
+            if isinstance(file_name, str):
+                file_name = [file_name]
+            self.all_contents.append(file_name)
+        if content is not None:
+            if isinstance(content, str):
+                content = [content]
+            self.all_contents.append(content)
 
     @staticmethod
     def _judge_two_dim(contents):
