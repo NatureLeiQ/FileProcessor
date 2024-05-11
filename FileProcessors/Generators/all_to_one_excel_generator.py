@@ -42,11 +42,12 @@ class AllToOneExcelGenerator(AbstractFileGenerator):
             file_name = list()
             file_name.append(temp_file_name)
         if isinstance(content, str):
-            content = list(content)
+            content = [content]
         self.all_contents.append(file_name)
         self.all_contents.append(content)
 
-    def _judge_two_dim(self, contents):
+    @staticmethod
+    def _judge_two_dim(contents):
         if not isinstance(contents, list):
             return False
         for content in contents:

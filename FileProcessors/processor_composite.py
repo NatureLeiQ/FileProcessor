@@ -41,7 +41,7 @@ class ProcessorComposite(AbstractFileProcessor):
                 config_result_processors.append(processor)
         for processor in config_result_processors:
             for generator in self.generators:
-                if generator.get_name() is None:
+                if generator.get_name() is None or generator.get_name().strip() == "":
                     raise GeneratorNameNotExistException("当前生成器的名称未配置" + str(generator))
                 generate_path_with_name = os.path.join(self.generate_path, generator.get_name())
                 if not os.path.exists(generate_path_with_name):

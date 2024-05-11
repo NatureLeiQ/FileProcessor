@@ -13,7 +13,7 @@ class AbstractFileScanner:
         self.fuzzy_match = fuzzy_match
 
     @abstractmethod
-    def scan(self, file_path):
+    def scan(self, file_info):
         """
         返回文件中是否能匹配到
         """
@@ -21,4 +21,8 @@ class AbstractFileScanner:
 
     @abstractmethod
     def support_scan(self, file_info):
+        pass
+
+    @abstractmethod
+    def get_name(self):
         pass

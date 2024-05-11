@@ -11,10 +11,10 @@ class FileContentStrategy(AbstractTraverserStrategy):
     不同的扫描器处理不同的文件。尽量运用多线程技术来进行处理，因为文件可能很多.扫描器只是扫描不进行处理，依旧属于文件遍历的范畴
     """
 
-    def __init__(self, match_text, fuzzy_match=False, order=10):
+    def __init__(self, match_text, specify_scanners, fuzzy_match=False, order=10):
         super().__init__(order)  # 需要把当前策略的优先级降低
         self.file_type_decider = FileTypeDecider()
-        self.scanner_composite = ScannerComposite(match_text, fuzzy_match)
+        self.scanner_composite = ScannerComposite(match_text, specify_scanners, fuzzy_match)
 
     def can_traverse(self, file_path):
         file_type_info = self.file_type_decider.decide_file_type(file_path)

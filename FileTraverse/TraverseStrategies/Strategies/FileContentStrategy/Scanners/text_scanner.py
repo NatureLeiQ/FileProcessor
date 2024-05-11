@@ -36,3 +36,6 @@ class TextScanner(AbstractFileScanner):
         except IOError:
             print("IOError")
             return False
+
+    def get_name(self):
+        return "textScanner"
