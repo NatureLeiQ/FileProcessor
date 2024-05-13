@@ -10,11 +10,10 @@ from FileTraverse.TraverseStrategies.traverse_strategy_action_model_enum import 
 from FileProcessors.Processors.log_file_path_processor import LogFilePathProcessor
 
 if __name__ == '__main__':
-    print(r"C:\Users\yuese\DesktopC:\Users\yuese\DesktopC:\Users\yuese\DesktopC:\Users\yuese\DesktopC:\Users\yuese\DesktC:\Users\yuese\DesktopC:\Users\yuese\DesktopC:\Users\yuese\DesktopC:\Users\yuese\DesktopC:\Users\yuese\DesktopopC:\Users\yuese\Desktop")
-    root_directory = r"C:\Users\yuese\Desktop"  # 根目录
-    generate_path = r"C:\Users\yuese\Desktop\新建文件夹"  # 生成的目录
+    root_directory = r"your\file\path"  # 根目录
+    generate_path = r"file\generation\path"
     strategies = list()
-    strategies.append(FileContentStrategy("菜品内容可选范围同自选", ["pdfScanner"], False))
+    strategies.append(FileContentStrategy("匹配的内容", ["具体的扫描器"], False))
 
     specify_processors = ["logFilePathProcessor"]
     generators = list()
