@@ -2,7 +2,6 @@ import xlrd
 from openpyxl import load_workbook
 
 from FileTraverse.TraverseStrategies.Strategies.FileContentStrategy.abstract_file_scanner import AbstractFileScanner
-from FileTraverse.TraverseStrategies.Strategies.FileContentStrategy.utils.scanner_text_utils import content_match
 from Utils.file_mime_type_enums import FileMimeTypeEnums
 
 
@@ -38,7 +37,7 @@ class ExcelScanner(AbstractFileScanner):
             # 遍历工作表的每一行和每一列
             for row in sheet.iter_rows():
                 for cell in row:
-                    if cell.value is not None and content_match(str(cell.value), self.match_text, self.fuzzy_match):
+                    if cell.value is not None and self.content_match(str(cell.value)):
                         return True
         return False
 

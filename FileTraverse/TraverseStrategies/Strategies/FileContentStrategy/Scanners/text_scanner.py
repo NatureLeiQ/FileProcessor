@@ -1,6 +1,5 @@
 from Expections.parameter_not_match_exception import ParameterNotMatchException
 from FileTraverse.TraverseStrategies.Strategies.FileContentStrategy.abstract_file_scanner import AbstractFileScanner
-from FileTraverse.TraverseStrategies.Strategies.FileContentStrategy.utils.scanner_text_utils import content_match
 from Utils.file_mime_type_enums import FileMimeTypeEnums
 
 
@@ -17,10 +16,10 @@ class TextScanner(AbstractFileScanner):
             with open(file_path, "r", encoding=file_info.get("char_set")) as file:
                 if not self.fuzzy_match:
                     content = file.read()
-                    return content_match(content, self.match_text, False)
+                    return self.content_match(content, self.match_text, False)
                 else:
                     for line in file:
-                        if content_match(line, self.match_text, True):
+                        if self.content_match(line, self.match_text, True):
                             return True
                     return False
         except PermissionError:

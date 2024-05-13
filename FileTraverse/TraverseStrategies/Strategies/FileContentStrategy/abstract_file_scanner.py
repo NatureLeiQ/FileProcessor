@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from fuzzywuzzy import fuzz
 
 
 class AbstractFileScanner:
@@ -26,3 +27,19 @@ class AbstractFileScanner:
     @abstractmethod
     def get_name(self):
         pass
+
+    def content_match(self, content, match_text=None, fuzzy_match=None):
+        if match_text is None:
+            match_text = self.match_text
+        if fuzzy_match is None:
+            fuzzy_match = self.fuzzy_match
+
+        if not fuzzy_match:
+            if match_text in content:
+                return True
+            else:
+                return False
+        else:
+            if fuzz.partial_ratio(content.strip("\n"), match_text) >= 80:
+                return True
+            return False
