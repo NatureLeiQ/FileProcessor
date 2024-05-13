@@ -1,5 +1,7 @@
 import os
 
+from alive_progress import alive_bar
+
 
 class FileTraverse:
     def __init__(self, root_path, strategy_manager):
@@ -13,11 +15,16 @@ class FileTraverse:
         self.traverse_paths = list()
 
     def traverse(self):
-        for root, dirs, files in os.walk(self.root_path):
-            for name in files:
-                file_path = os.path.join(root, name)
-                if self._expect_traverse(file_path):
-                    self.traverse_paths.append(file_path)
+
+        traverse_dir_nums = self._count_traverse_dir_nums()
+        with alive_bar(total=traverse_dir_nums, title="文件夹遍历中:", bar='smooth', force_tty=True) as dir_bar:
+            for root, dirs, files in os.walk(self.root_path):
+                dir_bar()
+                dir_bar.text = f"当前文件夹：{root}"
+                for name in files:
+                    file_path = os.path.join(root, name)
+                    if self._expect_traverse(file_path):
+                        self.traverse_paths.append(file_path)
 
     def _expect_traverse(self, file_path):
         """
@@ -26,3 +33,9 @@ class FileTraverse:
         """
         self.strategy_manager.set_current_file(file_path)
         return self.strategy_manager.should_process()
+
+    def _count_traverse_dir_nums(self):
+        count = 0
+        for _, _, _ in os.walk(self.root_path):
+            count += 1
+        return count
