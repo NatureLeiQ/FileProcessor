@@ -7,6 +7,7 @@ class DirNameStrategy(AbstractTraverserStrategy):
     """
     文件夹名称策略
     """
+
     def __init__(self, dir_names, include=True):
         super().__init__()
         self.dir_names = dir_names
@@ -37,6 +38,3 @@ class DirNameStrategy(AbstractTraverserStrategy):
     @staticmethod
     def _contains_dir(split_path, dir_name):
         return dir_name in split_path
-
-
-

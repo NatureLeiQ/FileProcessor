@@ -1,9 +1,9 @@
 import warnings
 
+from docx import Document
+
 from FileTraverse.TraverseStrategies.Strategies.FileContentStrategy.abstract_file_scanner import AbstractFileScanner
 from Utils.file_mime_type_enums import FileMimeTypeEnums
-
-from docx import Document
 
 
 class WordScanner(AbstractFileScanner):
@@ -58,4 +58,3 @@ class WordScanner(AbstractFileScanner):
             if heading.style.name.startswith('Heading'):
                 if self.content_match(heading.text):
                     return True
-

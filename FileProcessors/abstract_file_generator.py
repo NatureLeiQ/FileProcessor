@@ -2,10 +2,11 @@ from abc import abstractmethod
 
 
 class AbstractFileGenerator:
+    def __init__(self):
+        self.generate_path = None
 
-    @abstractmethod
     def set_generate_path(self, path):
-        pass
+        self.generate_path = path
 
     @abstractmethod
     def support_generate(self, file_path):

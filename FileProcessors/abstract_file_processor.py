@@ -2,19 +2,26 @@ from abc import abstractmethod
 
 
 class AbstractFileProcessor:
+    def __init__(self):
+        self.generate_path = None
+        self.generators = list()
 
     @abstractmethod
     def support_process(self, file_path):
         pass
 
-    @abstractmethod
     def set_generator(self, generator):
-        # 可配置多个生成器，这样可以生成多个类型的文件
-        pass
+        if isinstance(generator, list):
+            self.generators.extend(generator)
+        else:
+            self.generators.append(generator)
 
-    @abstractmethod
     def support_generate(self, path):
-        pass
+        for generator in self.generators:
+            # 默认有一个生成器可以生成，就返回true
+            if generator.support_generate(path):
+                return True
+        return False
 
     @abstractmethod
     def process(self, file_path):

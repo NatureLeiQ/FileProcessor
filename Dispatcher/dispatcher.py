@@ -1,3 +1,5 @@
+import logging
+
 from alive_progress import alive_bar
 
 from FileProcessors.processor_composite import ProcessorComposite
@@ -30,6 +32,9 @@ class Dispatcher:
         # 对这些路径进行processor处理操作
         # 需要一个映射吗？每个处理器的结果可能根本不同，如何保证不同的处理器能够处理到正确的内容？处理器目前来说是根据文件类型来处理的，然后处理器里面还包括不同的功能执行器，以执行不同的功能
         # 进度条正常显示可能需要以下配置：项目->当前配置->修改选项（添加运行选项）->在输出控制台中模拟终端
+        if self.traverse_paths is None:
+            logging.warning("no file can be processed")
+            return
         with alive_bar(bar='smooth', title="文件处理中：", force_tty=True) as bar:
             for traverse_path in self.traverse_paths:
                 bar()

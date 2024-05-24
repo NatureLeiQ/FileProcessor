@@ -8,21 +8,9 @@ from Utils.encode_decode_utils import get_unicode_decode
 class PropertiesChineseProcessor(AbstractFileProcessor):
 
     def __init__(self):
+        super().__init__()
         self.generate_path = None
         self.generators = list()
-
-    def set_generator(self, generator):
-        if isinstance(generator, list):
-            self.generators.extend(generator)
-        else:
-            self.generators.append(generator)
-
-    def support_generate(self, path):
-        for generator in self.generators:
-            # 默认有一个生成器可以生成，就返回true
-            if generator.support_generate(path):
-                return True
-        return False
 
     def support_process(self, file_path):
         return file_path.endswith('.properties')

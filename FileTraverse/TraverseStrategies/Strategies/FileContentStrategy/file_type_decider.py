@@ -5,6 +5,7 @@ import cchardet
 import filetype
 
 from Utils.file_mime_type_enums import FileMimeTypeEnums
+from Utils.file_utils import decide_file_type_by_encode
 
 
 class FileTypeDecider:
@@ -12,6 +13,7 @@ class FileTypeDecider:
     def __init__(self):
         pass
 
+    @staticmethod
     def decide_file_type(self, file_path):
         """
         三步走：先用guess判断文件类型，再用文件后缀判断，若最后都没得到结果，那就用cchardet进行编码判断。目前只支持utf-8格式的
@@ -34,13 +36,7 @@ class FileTypeDecider:
         #     return mime_type
 
         # 文件编码判断
-        charset, confidence = self._detect_encoding(file_path)
-        if charset is not None and confidence > 0.9:
-            file_type_dict["mime_type_enum"] = FileMimeTypeEnums.text
-            file_type_dict["char_set"] = charset
-            return file_type_dict
-        file_type_dict["mime_type_enum"] = FileMimeTypeEnums.unknown
-        file_type_dict["char_set"] = None
+        file_type_dict = decide_file_type_by_encode(file_path)
         return file_type_dict
 
     @staticmethod
@@ -57,5 +53,3 @@ class FileTypeDecider:
         base, extension = os.path.splitext(file_path)
         extension_without_dot = extension[1:] if extension else None
         return extension_without_dot
-
-

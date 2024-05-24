@@ -1,4 +1,5 @@
 import pdfplumber
+
 from FileTraverse.TraverseStrategies.Strategies.FileContentStrategy.abstract_file_scanner import AbstractFileScanner
 from Utils.file_mime_type_enums import FileMimeTypeEnums
 

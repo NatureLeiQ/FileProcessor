@@ -1,4 +1,6 @@
+from Expections.parameter_not_match_exception import ParameterNotMatchException
 from Expections.strategy_action_not_match_exception import StrategyActionNotMatchException
+from .Strategies.transparency_strategy import TransparencyStrategy
 from ..TraverseStrategies.traverse_strategy_action_model_enum import TraverseStrategyActionModelEnum
 
 
@@ -11,9 +13,16 @@ class TraverseStrategyManager:
         :param strategies_action_model_enum 策略生效模式，例如：全部满足、满足其中一个、某一个必须满足某几个
         :param exclude_strategies 排除的策略，用于[SATISFACTION_AND_EXCLUDE]这种情况，相当于被排除部分的策略
         """
+
+        self._init_check(strategies, exclude_strategies)
+        if strategies is None:
+            strategies = [TransparencyStrategy()]
         self.strategies = self._ordered_strategies(strategies)
 
+        if strategies_action_model_enum is None:
+            strategies_action_model_enum = TraverseStrategyActionModelEnum.FULL_SATISFACTION
         self.strategies_action_model_enum = strategies_action_model_enum
+
         self.exclude_strategies = exclude_strategies
         self.file_path = None
 
@@ -110,5 +119,9 @@ class TraverseStrategyManager:
         # 根据order大小降序，order越大，排序越前。默认order为1000
         return sorted(strategies, key=lambda strategy: strategy.order)
 
-
-
+    @staticmethod
+    def _init_check(strategies, exclude_strategies):
+        if isinstance(strategies, list):
+            raise ParameterNotMatchException("扫描策略类型不正确，应为list类型")
+        if isinstance(exclude_strategies, list):
+            raise ParameterNotMatchException("扫描排除策略类型不正确，应为list类型")

@@ -7,20 +7,8 @@ from FileProcessors.abstract_file_processor import AbstractFileProcessor
 class ExtractChineseInJavaProcessor(AbstractFileProcessor):
 
     def __init__(self):
+        super().__init__()
         self.generators = list()
-
-    def set_generator(self, generator):
-        if isinstance(generator, list):
-            self.generators.extend(generator)
-        else:
-            self.generators.append(generator)
-
-    def support_generate(self, path):
-        for generator in self.generators:
-            # 默认有一个生成器可以生成，就返回true
-            if generator.support_generate(path):
-                return True
-        return False
 
     def get_name(self):
         return "extractChineseInJavaProcessor"

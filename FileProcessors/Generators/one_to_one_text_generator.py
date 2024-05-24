@@ -10,10 +10,8 @@ class OneToOneTextGenerator(AbstractFileGenerator):
         return "oneToOneTextGenerator"
 
     def __init__(self):
+        super().__init__()
         self.generate_path = None
-
-    def set_generate_path(self, path):
-        self.generate_path = path
 
     def support_generate(self, file_path):
         return True

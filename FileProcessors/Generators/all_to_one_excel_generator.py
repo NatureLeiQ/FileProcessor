@@ -8,12 +8,9 @@ from FileProcessors.abstract_file_generator import AbstractFileGenerator
 class AllToOneExcelGenerator(AbstractFileGenerator):
 
     def __init__(self, file_name=None):
-        self.generate_path = None
+        super().__init__()
         self.all_contents = list()  # 保存二维列表
         self.file_name = file_name
-
-    def set_generate_path(self, path):
-        self.generate_path = path
 
     def support_generate(self, file_path):
         return True

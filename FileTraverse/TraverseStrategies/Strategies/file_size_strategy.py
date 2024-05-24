@@ -74,4 +74,3 @@ class FileSizeStrategy(AbstractTraverserStrategy):
         if self.unit == FileUnitEnums.B:
             return file_size_bytes
         return file_size_bytes / math.pow(1024, self.unit)
-

@@ -8,4 +8,5 @@ def deprecated(func):
         warnings.warn(f"{func.__name__} is deprecated and may be removed in future versions.",
                       DeprecationWarning, stacklevel=2)
         return func(*args, **kwargs)
+
     return new_func

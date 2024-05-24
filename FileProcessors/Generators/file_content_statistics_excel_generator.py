@@ -6,8 +6,6 @@ class FileContentStatisticsExcelGenerator(AbstractFileGenerator):
     TODO
      统计文件夹下面的包含某种类型的文件内容，并整理到excel中
     """
-    def set_generate_path(self, path):
-        pass
 
     def support_generate(self, file_path):
         pass

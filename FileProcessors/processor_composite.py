@@ -10,7 +10,7 @@ from Utils.import_utils import load_modules_from_folder
 
 class ProcessorComposite(AbstractFileProcessor):
     def __init__(self, specify_processors, generators, generate_path):
-
+        super().__init__()
         self.generators = generators
         self._check_generators()
         self.specify_processors = specify_processors
