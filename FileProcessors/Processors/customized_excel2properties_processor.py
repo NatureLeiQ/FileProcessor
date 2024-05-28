@@ -52,5 +52,5 @@ class CustomizedExcel2PropertiesProcessor(AbstractFileProcessor):
                 if row:
                     compare_cell = row[0]
                     if compare_cell == match:
-                        return row[2]
+                        return row[2] if row[2] is not None else ""
         return ""
