@@ -13,10 +13,12 @@ class TraverseStrategyManager:
         :param strategies_action_model_enum 策略生效模式，例如：全部满足、满足其中一个、某一个必须满足某几个
         :param exclude_strategies 排除的策略，用于[SATISFACTION_AND_EXCLUDE]这种情况，相当于被排除部分的策略
         """
-
-        self._init_check(strategies, exclude_strategies)
         if strategies is None:
             strategies = [TransparencyStrategy()]
+        if exclude_strategies is None:
+            exclude_strategies = []
+        self._init_check(strategies, exclude_strategies)
+
         self.strategies = self._ordered_strategies(strategies)
 
         if strategies_action_model_enum is None:
@@ -121,7 +123,7 @@ class TraverseStrategyManager:
 
     @staticmethod
     def _init_check(strategies, exclude_strategies):
-        if isinstance(strategies, list):
+        if not isinstance(strategies, list):
             raise ParameterNotMatchException("扫描策略类型不正确，应为list类型")
-        if isinstance(exclude_strategies, list):
+        if not isinstance(exclude_strategies, list):
             raise ParameterNotMatchException("扫描排除策略类型不正确，应为list类型")
