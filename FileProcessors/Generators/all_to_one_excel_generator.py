@@ -22,6 +22,8 @@ class AllToOneExcelGenerator(AbstractFileGenerator):
         # 将所有的元素集中到一个excel文件里面
         if self.file_name is None:
             self.file_name = "allToOneExcelGeneratorGenerated"
+        if self.all_contents == "" or self.all_contents is None:
+            return
         wb = Workbook()
         ws = wb.active
         for contents in self.all_contents:

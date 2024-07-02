@@ -24,7 +24,10 @@ class OneToOneTextGenerator(AbstractFileGenerator):
         if os.path.isfile(generate_file_path):
             generate_file_path = os.path.join(self.generate_path, file_name + str(random.randint(0, 100)) + ".txt")
         with open(generate_file_path, "w", encoding="utf-8") as f:
-            lines = content.split("\n")
+            try:
+                lines = content.split("\n")
+            except Exception:
+                print(content)
             for line in lines:
                 if isinstance(line, list):
                     line = "    ".join(line)

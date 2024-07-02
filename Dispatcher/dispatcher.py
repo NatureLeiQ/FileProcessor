@@ -1,4 +1,7 @@
 import logging
+import math
+import os
+from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED, ProcessPoolExecutor
 
 from alive_progress import alive_bar
 
@@ -10,14 +13,13 @@ from FileTraverse.file_traverse import FileTraverse
 class Dispatcher:
     def __init__(self, root_path, generate_path, strategies, strategies_action_model_enum, generators,
                  exclude_strategies=None,
-                 specify_processors=None, multi_process_threshold=1000):
+                 specify_processors=None):
         """
         :param root_path: 文件扫描的根路径
         :param strategies: 文件扫描的策略
         :param strategies_action_model_enum: 策略生效模式
         :param exclude_strategies: 文件排除的策略
         :param specify_processors: 指定的文件处理器，不指定会遍历所有可执行的处理器。后期可重构，加入处理器的执行策略。类似遍历策略一样
-        :multi_process_threshold: 多线程阈值，默认1000个文件以内单线程，超过了多线程
         """
         self.root_path = root_path
         self.strategies = strategies
@@ -26,7 +28,6 @@ class Dispatcher:
         self.file_traverse = self._config_file_traverse()
         self.processor_composite = ProcessorComposite(specify_processors, generators, generate_path)
         self.traverse_paths = None
-        self.multi_process_threshold = multi_process_threshold
 
     def run(self):
         self.file_traverse.traverse()
@@ -37,11 +38,9 @@ class Dispatcher:
         if self.traverse_paths is None:
             logging.warning("no file can be processed")
             return
-        with alive_bar(bar='smooth', title="文件处理中：", force_tty=True) as bar:
-            for traverse_path in self.traverse_paths:
-                bar()
-                bar.text = f"当前文件：{traverse_path}"
-                self.processor_composite.process(traverse_path)
+        print("满足要求文件数量", len(self.traverse_paths))
+        print("开始处理...")
+        self.single_process()
 
     def _config_file_traverse(self):
         return FileTraverse(self.root_path, self._config_traverse_strategy_manager())
@@ -52,3 +51,23 @@ class Dispatcher:
         :return:
         """
         return TraverseStrategyManager(self.strategies, self.strategies_action_model_enum, self.exclude_strategies)
+
+    # TODO 多线程
+    def multi_pre_process(self):
+        cpu_cores = os.cpu_count()
+        if cpu_cores > len(self.traverse_paths):
+            cpu_cores = len(self.traverse_paths)
+        size = math.ceil(len(self.traverse_paths) / cpu_cores)
+        # 初始化结果列表
+        result = []
+        # 迭代构建子列表
+        for i in range(0, len(self.traverse_paths), size):
+            result.append(self.traverse_paths[i:i + size])
+        return result
+
+    def single_process(self):
+        with alive_bar(bar='smooth', title="文件处理中：", force_tty=True) as bar:
+            for traverse_path in self.traverse_paths:
+                bar()
+                bar.text = f"当前文件：{traverse_path}"
+                self.processor_composite.process(traverse_path)

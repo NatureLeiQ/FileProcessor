@@ -75,13 +75,4 @@ class CustomizedExcel2SQLProcessor(AbstractFileProcessor):
         return sql
 
 
-# if __name__ == '__main__':
-#     line = "created_by`, `created_at`, `updated_by_id`, `updated_by`, `updated_at`, `deleted`, `deleted_time`) VALUES (1, 'app_system', 'dcc', '数据采集系统', 'Data Collection System', 0, 'god', '2020-11-26 16:09:32.000', 0, 'god', '2020-11-26 16:09:32.000', b'0', '1900-01-01 00:00:00.000');"
-#     line = line.strip()
-#
-#     strip_annotation_index = line.find("VALUES")
-#     process_line1 = line[strip_annotation_index:]  # value部分的内容
-#     process_line1 = process_line1.replace("VALUES", "").replace("'", "").replace("(", "").replace(")", "")
-#     process_line1 = process_line1.split(",")
-#     process_line1 = [one.strip() for one in process_line1]
-#     print(process_line1)
+
