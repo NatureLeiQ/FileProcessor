@@ -38,6 +38,8 @@ class CustomizedExcel2PropertiesProcessor(AbstractFileProcessor):
     @staticmethod
     def _init_sheets():
         excel_file_path = ""
+        if excel_file_path is None or excel_file_path == "":
+            return
         workbook = load_workbook(excel_file_path)
         sheets = list()
 

@@ -1,6 +1,9 @@
 import os.path
 import re
 
+from fuzzywuzzy import fuzz
+from openpyxl.reader.excel import load_workbook
+
 from FileProcessors.abstract_file_processor import AbstractFileProcessor
 
 
@@ -9,6 +12,8 @@ class ExtractChineseInJavaProcessor(AbstractFileProcessor):
     def __init__(self):
         super().__init__()
         self.generators = list()
+        self.template_excel = r"E:\temp\俄语版.xlsx"
+        self.excel_sheets = self._init_sheets()
 
     def get_name(self):
         return "extractChineseInJavaProcessor"
@@ -29,6 +34,9 @@ class ExtractChineseInJavaProcessor(AbstractFileProcessor):
                     java_package = line.strip("package").strip(";")
                     file_name = os.path.basename(file_path)
                     java_package = java_package + "(" + file_name + ")"
+                # 不处理注解的中文
+                if line.startswith("@"):
+                    continue
                 # 单行注释的处理
                 if line.startswith("//"):
                     continue
@@ -41,6 +49,8 @@ class ExtractChineseInJavaProcessor(AbstractFileProcessor):
                     continue
                 if multi_annotation:
                     continue
+                if line.find("@Api") != -1:
+                    continue
                 # 行内的处理
                 current_chinese = self._process_single_line(line)
                 if len(current_chinese) > 0 and self._contains_chinese(current_chinese):
@@ -49,6 +59,12 @@ class ExtractChineseInJavaProcessor(AbstractFileProcessor):
                     row_number = "行号:" + str(row_num)
                     chinese_include_row.append(row_number)
                     chinese_include_row.append(line)
+                    chinese_include_row.append(current_chinese)
+                    # 查找是否有匹配的,模糊匹配
+                    fuzzy_match_cn, ru = self._fuzzy_match_from_excel(current_chinese)
+
+                    chinese_include_row.append(fuzzy_match_cn)
+                    chinese_include_row.append(ru)
                     file_chinese_list.append(chinese_include_row)
         if len(file_chinese_list) > 0:
             for generator in self.generators:
@@ -80,3 +96,39 @@ class ExtractChineseInJavaProcessor(AbstractFileProcessor):
     def _contains_chinese(text):
         pattern = re.compile(r'[\u4e00-\u9fff]')  # 匹配中文字符的正则表达式范围
         return bool(pattern.search(text))
+
+    def _fuzzy_match_from_excel(self, current_chinese):
+        max_ratios = dict()
+        for sheet in self.excel_sheets:
+            for row in sheet.iter_rows(values_only=True):
+                if row:
+                    compare_cell = row[1]
+                    if fuzz.ratio(compare_cell, current_chinese.strip("\n")) >= 90 and fuzz.ratio(
+                            current_chinese.strip("\n"), compare_cell) >= 90:
+                        current_max_ratio = max(fuzz.ratio(compare_cell, current_chinese.strip("\n")),
+                                                fuzz.ratio(current_chinese.strip("\n"), compare_cell))
+                        if len(max_ratios) == 0:
+                            max_ratios["cell"] = row
+                            max_ratios["ratio"] = current_max_ratio
+                        else:
+                            if current_max_ratio >= max_ratios["ratio"]:
+                                if current_max_ratio == max_ratios["ratio"] and row[2] != current_chinese.strip("\n"):
+                                    # 匹配度相等条件下看第二个中文是否完全相等，第二个完全相等就设置，否则不设置
+                                    continue
+                                else:
+                                    max_ratios["cell"] = row
+                                    max_ratios["ratio"] = current_max_ratio
+
+        if len(max_ratios) == 0:
+            return "", ""
+        else:
+            cell = max_ratios["cell"]
+            return cell[1], cell[2] if cell[2] is not None else ""
+
+    def _init_sheets(self):
+        workbook = load_workbook(self.template_excel)
+        sheets = list()
+        for sheet_name in workbook.sheetnames:
+            sheet = workbook[sheet_name]
+            sheets.append(sheet)
+        return sheets
